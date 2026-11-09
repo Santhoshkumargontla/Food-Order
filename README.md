@@ -1,248 +1,521 @@
-# Food-Order
-# Online Food Ordering Application
+# Food Ordering Application
 
-A containerized online food ordering application built using **React, Flask, MongoDB, Docker, and Docker Compose**. Users can browse food items, add items to their cart, and place orders. The backend processes orders and stores them in MongoDB.
+A full-stack Food Ordering Application built using **React.js, Flask, and MongoDB**. The application allows users to browse food items and place orders through a web interface. It uses Docker for containerization and Kubernetes with Minikube for deployment and orchestration.
+
+## Project Overview
+
+The Food Ordering Application demonstrates how a full-stack application can be developed, containerized, and deployed using modern DevOps tools.
+
+The application consists of three main components:
+
+- **Frontend:** React application served using Nginx.
+- **Backend:** Flask REST API developed using Python.
+- **Database:** MongoDB for storing food order information.
+
+Docker is used to build and run containers, while Kubernetes manages application deployments, services, and persistent storage.
 
 ## Features
 
-- Browse a food menu with item names, prices, categories, and descriptions.
-- Search and filter food items.
-- Add food items to the cart and update quantities.
-- Place food orders through a REST API.
-- Calculate order totals on the backend.
-- Store orders persistently in MongoDB.
-- Run the frontend, backend, and database using Docker Compose.
-- Use Nginx to serve the React frontend and proxy API requests to Flask.
+- Browse available food items.
+- View food item names and prices.
+- Place food orders through the frontend.
+- Send order information to the Flask backend.
+- Store order information in MongoDB.
+- Retrieve and manage order data through the backend.
+- Containerized frontend, backend, and database.
+- Kubernetes-based deployment using Minikube.
+- Persistent MongoDB storage using Kubernetes PersistentVolumeClaims.
 
-## Tech Stack
+## Technology Stack
 
-| Technology | Purpose |
+| Category | Technology |
 |---|---|
-| React | Frontend user interface |
-| Vite | Frontend development and build tool |
-| Python | Backend programming language |
-| Flask | REST API |
-| Flask-CORS | Cross-origin request support |
-| PyMongo | MongoDB integration |
-| MongoDB | Food and order data storage |
-| Nginx | Frontend web server and API reverse proxy |
-| Docker | Application containerization |
-| Docker Compose | Multi-container orchestration |
+| Frontend | React.js |
+| Frontend Server | Nginx |
+| Backend | Python, Flask |
+| Database | MongoDB |
+| Containerization | Docker |
+| Container Management | Docker Compose |
+| Orchestration | Kubernetes |
+| Local Kubernetes | Minikube |
+| Image Registry | Docker Hub |
+
+## Application Architecture
+
+```text
+                  USER
+                    |
+                    v
+          React Frontend (Nginx)
+                    |
+                    v
+             Flask Backend
+                    |
+                    v
+                 MongoDB
+                    |
+                    v
+             Orders Collection
+```
+
+### Component Details
+
+**1. Frontend**
+- Developed using React.
+- Provides the user interface for browsing food items and placing orders.
+- Served using Nginx inside a Docker container.
+- Communicates with the Flask backend.
+
+**2. Backend**
+- Developed using Python and Flask.
+- Handles incoming API requests from the frontend.
+- Processes food order information.
+- Connects to MongoDB to store order records.
+
+**3. Database**
+- Uses MongoDB to store order information.
+- Runs in a separate container.
+- Uses persistent storage in the Kubernetes deployment to retain data across MongoDB pod restarts.
 
 ## Project Structure
 
 ```text
-food-ordering/
+Food-Order/
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   ├── Dockerfile
+│   └── package.json
+│
 ├── backend/
 │   ├── app.py
 │   ├── requirements.txt
 │   └── Dockerfile
-├── frontend/
-│   ├── src/
-│   │   ├── App.jsx
-│   │   ├── App.css
-│   │   └── index.css
-│   ├── public/
-│   ├── package.json
-│   ├── package-lock.json
-│   ├── nginx.conf
-│   └── Dockerfile
-└── docker-compose.yml
+│
+├── docker-compose.yml
+│
+├── kubernetes/
+│   ├── deployment.yaml
+│   └── service.yaml
+│
+└── README.md
 ```
 
-## Prerequisites
+*Note: The structure above illustrates the main project components. Keep the actual filenames and directories from your repository if they differ.*
 
-Install the following software:
+## Docker Hub Images
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- Git (optional, for version control)
+The Docker images are published to Docker Hub.
 
-Docker Desktop must be running before starting the application.
+| Component | Docker Image |
+|---|---|
+| Frontend | `gontlasanthoshkumar2005/food-frontend:v1` |
+| Backend | `gontlasanthoshkumar2005/food-backend:v1` |
 
-## Getting Started
+### Docker Hub Repositories
 
-### 1. Clone the repository
+- [Food Ordering Frontend](https://hub.docker.com/r/gontlasanthoshkumar2005/food-frontend)
+- [Food Ordering Backend](https://hub.docker.com/r/gontlasanthoshkumar2005/food-backend)
 
-If you have uploaded this project to GitHub:
+### Pull Docker Images
 
 ```bash
-git clone <your-repository-url>
-cd food-ordering
+docker pull gontlasanthoshkumar2005/food-frontend:v1
+
+docker pull gontlasanthoshkumar2005/food-backend:v1
 ```
 
-Alternatively, open PowerShell in your existing project directory:
+## Run the Application Locally
 
-```powershell
-cd C:\Users\santh\food-ordering
+### Prerequisites
+
+Install the following tools:
+
+- Node.js and npm
+- Python
+- Docker Desktop
+- Docker Compose
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Santhoshkumargontla/Food-Order.git
+
+cd Food-Order
 ```
 
-### 2. Build and start the application
+### 2. Run Using Docker Compose
 
-Run:
+Build and start all application services:
+
+```bash
+docker compose up --build
+```
+
+To run the containers in the background:
 
 ```bash
 docker compose up --build -d
 ```
 
-Docker Compose builds the frontend and backend images, starts MongoDB, and launches the services.
-
-### 3. Check the containers
+### 3. Check Running Containers
 
 ```bash
 docker compose ps
 ```
 
-The `frontend`, `backend`, and `mongo` services should be running. MongoDB should report a healthy status.
+### 4. Access the Application
 
-### 4. Open the application
-
-| Service | URL |
-|---|---|
-| Frontend | http://localhost:8080 |
-| Backend health check | http://localhost:5000/api/health |
-| Food menu API through Nginx | http://localhost:8080/api/foods |
-
-The health endpoint should report a successful database connection.
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/health` | Checks backend and database connectivity |
-| GET | `/api/foods` | Retrieves the food menu |
-| POST | `/api/orders` | Creates a food order |
-
-### Example: Retrieve the food menu
-
-```bash
-curl http://localhost:5000/api/foods
-```
-
-### Example: Place an order
-
-Replace the example food ID with a valid ID returned by the food menu API.
-
-```json
-{
-  "items": [
-    {
-      "foodId": "YOUR_FOOD_ID",
-      "quantity": 1
-    }
-  ]
-}
-```
-
-Send this JSON as a POST request to:
+Open the frontend in your browser:
 
 ```text
-http://localhost:5000/api/orders
+http://localhost:8080
 ```
 
-A successful request returns the order ID, total amount, and order status.
+The Flask backend runs on port `5000`.
 
-## Verify Orders in MongoDB
-
-Check the number of saved orders:
-
-```bash
-docker compose exec mongo mongosh food_ordering --eval "db.orders.countDocuments()"
-```
-
-Display saved orders:
-
-```bash
-docker compose exec mongo mongosh food_ordering --eval "db.orders.find().pretty()"
-```
-
-The project was tested successfully by placing an order for one Classic Burger priced at ₹149 and verifying that the order was saved in MongoDB.
-
-## Useful Docker Commands
-
-**View running containers**
-
-```bash
-docker compose ps
-```
-
-**View application logs**
-
-```bash
-docker compose logs -f
-```
-
-**View backend logs**
-
-```bash
-docker compose logs --tail=50 backend
-```
-
-**Restart the application**
-
-```bash
-docker compose restart
-```
-
-**Stop the containers**
+### 5. Stop the Application
 
 ```bash
 docker compose down
 ```
 
-The named MongoDB volume preserves database data when containers are stopped or removed with `docker compose down`.
+To remove the containers and associated Compose network, use:
 
-> Warning: `docker compose down -v` removes the named volumes and can delete the stored database data.
-
-## Docker Architecture
-
-```text
-User's Browser
-      |
-      v
-React Frontend + Nginx
-      |
-      | /api requests
-      v
-Flask Backend
-      |
-      | PyMongo
-      v
-MongoDB Database
-      |
-      v
-Persistent Docker Volume
+```bash
+docker compose down
 ```
 
-Docker Compose connects the services through its internal network. Nginx forwards frontend API requests to the Flask backend, and Flask communicates with MongoDB using the `MONGO_URI` environment variable.
+Do not use `-v` unless you intentionally want to remove the associated persistent volumes and their data.
+
+## Docker Commands
+
+### Build Docker Images
+
+Build the frontend image:
+
+```bash
+docker build -t gontlasanthoshkumar2005/food-frontend:v1 ./frontend
+```
+
+Build the backend image:
+
+```bash
+docker build -t gontlasanthoshkumar2005/food-backend:v1 ./backend
+```
+
+### Push Images to Docker Hub
+
+Login:
+
+```bash
+docker login
+```
+
+Push the frontend:
+
+```bash
+docker push gontlasanthoshkumar2005/food-frontend:v1
+```
+
+Push the backend:
+
+```bash
+docker push gontlasanthoshkumar2005/food-backend:v1
+```
+
+## Kubernetes Deployment Using Minikube
+
+The application is deployed to a local Kubernetes cluster using Minikube.
+
+### Prerequisites
+
+- Docker Desktop
+- kubectl
+- Minikube
+
+### 1. Start Minikube
+
+```bash
+minikube start --driver=docker
+```
+
+Check cluster status:
+
+```bash
+minikube status
+```
+
+Check Kubernetes nodes:
+
+```bash
+kubectl get nodes
+```
+
+### 2. Deploy Application Resources
+
+Apply the Kubernetes deployment and service manifests from the project's Kubernetes directory:
+
+```bash
+kubectl apply -f kubernetes/
+```
+
+### 3. Check Deployments
+
+```bash
+kubectl get deployments
+```
+
+The Food Ordering application uses these deployments:
+
+- `food-frontend`
+- `food-backend`
+- `food-mongo`
+
+### 4. Check Pods
+
+```bash
+kubectl get pods
+```
+
+All application pods should reach the `Running` state.
+
+### 5. Check Services
+
+```bash
+kubectl get services
+```
+
+The application uses the following services:
+
+| Component | Service Name | Type | Port |
+|---|---|---|---|
+| Frontend | food-frontend | NodePort | 30080 |
+| Backend | backend | ClusterIP | 5000 |
+| MongoDB | mongo | ClusterIP | 27017 |
+
+### 6. Access the Frontend
+
+Run:
+
+```bash
+minikube service food-frontend --url
+```
+
+Open the URL returned by Minikube in your browser.
+
+Keep the terminal running while using the service URL if Minikube creates a local tunnel.
+
+## MongoDB Persistent Storage
+
+MongoDB stores the order records in a database collection.
+
+The Kubernetes deployment uses a PersistentVolumeClaim named:
+
+```text
+mongo-pvc
+```
+
+The PVC provides persistent storage for MongoDB.
+
+This means database records can remain available even when the MongoDB pod is restarted, provided the persistent volume is retained.
+
+Check persistent volume claims:
+
+```bash
+kubectl get pvc
+```
+
+Check MongoDB pod:
+
+```bash
+kubectl get pods
+```
+
+Inspect the MongoDB deployment:
+
+```bash
+kubectl describe deployment food-mongo
+```
+
+## Application Verification
+
+The application was tested after deployment.
+
+| Test | Expected Result |
+|---|---|
+| Frontend deployment | Running |
+| Backend deployment | Running |
+| MongoDB deployment | Running |
+| Frontend access | Opens in browser |
+| Food item display | Food items displayed |
+| Place order | Order submitted successfully |
+| MongoDB storage | Order record saved |
+| Database verification | Order record retrieved |
+
+### Verify MongoDB Orders
+
+Connect to the MongoDB pod:
+
+```bash
+kubectl exec deployment/food-mongo -- mongosh
+```
+
+Select the database and inspect the orders collection:
+
+```javascript
+show dbs
+```
+
+Select the appropriate application database and run:
+
+```javascript
+show collections
+```
+
+Then inspect the orders collection:
+
+```javascript
+db.orders.find().pretty()
+```
+
+The database and collection names should match the configuration used by the application.
+
+## Useful Kubernetes Commands
+
+Check all resources:
+
+```bash
+kubectl get all
+```
+
+Check pods:
+
+```bash
+kubectl get pods
+```
+
+Check deployments:
+
+```bash
+kubectl get deployments
+```
+
+Check services:
+
+```bash
+kubectl get services
+```
+
+Check persistent storage:
+
+```bash
+kubectl get pvc
+```
+
+View backend logs:
+
+```bash
+kubectl logs deployment/food-backend
+```
+
+View frontend logs:
+
+```bash
+kubectl logs deployment/food-frontend
+```
+
+View MongoDB logs:
+
+```bash
+kubectl logs deployment/food-mongo
+```
+
+Restart the application deployments:
+
+```bash
+kubectl rollout restart deployment/food-frontend
+
+kubectl rollout restart deployment/food-backend
+```
+
+Check deployment status:
+
+```bash
+kubectl rollout status deployment/food-frontend
+
+kubectl rollout status deployment/food-backend
+```
+
+## Troubleshooting
+
+**1. Docker daemon is not running**
+
+Start Docker Desktop and wait until the Docker Engine is running.
+
+Check:
+
+```bash
+docker info
+```
+
+**2. Minikube is not running**
+
+```bash
+minikube start --driver=docker
+```
+
+**3. Pods are not starting**
+
+```bash
+kubectl get pods
+kubectl describe pods
+```
+
+**4. Backend connection problems**
+
+```bash
+kubectl logs deployment/food-backend
+```
+
+Check the MongoDB connection configuration and Kubernetes service name.
+
+**5. Frontend is not accessible**
+
+```bash
+kubectl get services
+minikube service food-frontend --url
+```
+
+**6. MongoDB data verification**
+
+```bash
+kubectl exec deployment/food-mongo -- mongosh
+```
+
+Check the configured database and orders collection.
 
 ## Learning Outcomes
 
-This project demonstrates:
+This project demonstrates practical experience with:
 
-- Writing Dockerfiles for frontend and backend applications.
-- Building Docker images.
-- Running multiple containers with Docker Compose.
-- Configuring communication between containers.
-- Using environment variables for service configuration.
-- Persisting data with Docker volumes.
-- Connecting a REST API to MongoDB.
-- Testing API responses and database persistence.
-- Using Nginx as a reverse proxy.
+- Full-stack application development.
+- React frontend development.
+- Flask REST API development.
+- MongoDB database integration.
+- Docker image creation and containerization.
+- Docker Compose orchestration.
+- Publishing images to Docker Hub.
+- Kubernetes Deployments and Services.
+- Minikube-based application deployment.
+- Persistent storage using Kubernetes PVCs.
+- Application testing and deployment verification.
 
-## Future Improvements
+## Author
 
-- Use Gunicorn for production-oriented Flask serving.
-- Add automated unit and integration tests.
-- Add a CI/CD pipeline using GitHub Actions or Jenkins.
-- Deploy the application to AWS.
-- Add authentication and order history.
+**Gontla Santhosh Kumar**
 
-## Project Status
+GitHub: [Santhoshkumargontla](https://github.com/Santhoshkumargontla)
 
-**Completed — Core Docker Compose workflow verified.**
-
-The React frontend, Flask backend, and MongoDB database were started successfully. Food retrieval and order creation were tested, and a saved order was verified in MongoDB.
-
-## License
-
-This project is intended for learning and portfolio demonstration. Add a license file if you plan to distribute it publicly.
+Project Repository: [Food Ordering Application](https://github.com/Santhoshkumargontla/Food-Order)
