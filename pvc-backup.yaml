@@ -1,0 +1,44 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"name":"mongo-pvc","namespace":"default"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"1Gi"}}}}
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: k8s.io/minikube-hostpath
+      volume.kubernetes.io/storage-provisioner: k8s.io/minikube-hostpath
+    creationTimestamp: "2026-11-07T05:21:41Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    name: mongo-pvc
+    namespace: default
+    resourceVersion: "832"
+    uid: 92f47d41-8e0b-43a5-91f8-f3dbc779df20
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+    storageClassName: standard
+    volumeMode: Filesystem
+    volumeName: pvc-92f47d41-8e0b-43a5-91f8-f3dbc779df20
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 1Gi
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-11-07T05:21:42Z"
+      message: A pod is currently referencing this PVC
+      reason: PodUsingPVC
+      status: "False"
+      type: Unused
+    phase: Bound
+kind: List
+metadata:
+  resourceVersion: ""

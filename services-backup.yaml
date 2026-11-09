@@ -1,0 +1,122 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"backend","namespace":"default"},"spec":{"ports":[{"port":5000,"targetPort":5000}],"selector":{"app":"food-backend"},"type":"ClusterIP"}}
+    creationTimestamp: "2026-11-07T05:21:48Z"
+    name: backend
+    namespace: default
+    resourceVersion: "853"
+    uid: 9af78d37-4af4-423e-9c54-d31d548664bb
+  spec:
+    clusterIP: 10.111.19.62
+    clusterIPs:
+    - 10.111.19.62
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 5000
+      protocol: TCP
+      targetPort: 5000
+    selector:
+      app: food-backend
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"food-frontend","namespace":"default"},"spec":{"ports":[{"nodePort":30080,"port":80,"targetPort":80}],"selector":{"app":"food-frontend"},"type":"NodePort"}}
+    creationTimestamp: "2026-11-07T05:21:48Z"
+    name: food-frontend
+    namespace: default
+    resourceVersion: "849"
+    uid: db27f0df-78ca-4651-9c8a-4315a0e24237
+  spec:
+    clusterIP: 10.111.27.151
+    clusterIPs:
+    - 10.111.27.151
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - nodePort: 30080
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: food-frontend
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: "2026-11-07T05:15:34Z"
+    labels:
+      component: apiserver
+      provider: kubernetes
+    name: kubernetes
+    namespace: default
+    resourceVersion: "252"
+    uid: 8bab9d71-57ae-4f18-abd4-daf57acde5f6
+  spec:
+    clusterIP: 10.96.0.1
+    clusterIPs:
+    - 10.96.0.1
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 8443
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"mongo","namespace":"default"},"spec":{"ports":[{"port":27017,"targetPort":27017}],"selector":{"app":"food-mongo"},"type":"ClusterIP"}}
+    creationTimestamp: "2026-11-07T05:21:48Z"
+    name: mongo
+    namespace: default
+    resourceVersion: "857"
+    uid: 38f3e879-0ffa-4c61-97d5-fee37dfc7fb1
+  spec:
+    clusterIP: 10.103.48.12
+    clusterIPs:
+    - 10.103.48.12
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 27017
+      protocol: TCP
+      targetPort: 27017
+    selector:
+      app: food-mongo
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""
